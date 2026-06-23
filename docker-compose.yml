@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web-security-scanner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: web-security-scanner:latest
+    container_name: web-security-scanner
+    volumes:
+      - ./output:/app/output
+    environment:
+      - TARGET=${TARGET}
+    command: /app/run-scan.sh -u ${TARGET} -o /app/output
+    networks:
+      - scanner-net
+
+networks:
+  scanner-net:
+    driver: bridge
