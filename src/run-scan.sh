@@ -49,7 +49,7 @@ echo "---------------------------------------------------"
 
 # 1. Katana (Spider)
 echo -e "${YELLOW}[*] Fase 1: Executando Katana (Web Spider)...${NC}"
-katana -u "$TARGET" -jc -hl -silent -o "$WORK_DIR/katana_endpoints.txt" -j | jq -c '.' > "$WORK_DIR/katana_results.json"
+katana -u "$TARGET" -silent -o "$WORK_DIR/katana_endpoints.txt" -json > "$WORK_DIR/katana_results.json"
 ENDPOINTS_COUNT=$(wc -l < "$WORK_DIR/katana_endpoints.txt" 2>/dev/null || echo 0)
 echo -e "${GREEN}[+] Katana finalizado. Encontrados $ENDPOINTS_COUNT endpoints.${NC}"
 
@@ -57,7 +57,7 @@ echo -e "${GREEN}[+] Katana finalizado. Encontrados $ENDPOINTS_COUNT endpoints.$
 echo -e "${YELLOW}[*] Fase 2: Executando Nikto (Server Scanner)...${NC}"
 # Extrair host para o Nikto
 HOST=$(echo "$TARGET" | awk -F/ '{print $3}')
-nikto -h "$HOST" -Format json -output "$WORK_DIR/nikto_results.json" > /dev/null 2>&1 || true
+nikto -h "$HOST" -f json -output "$WORK_DIR/nikto_results.json" > /dev/null 2>&1 || true
 echo -e "${GREEN}[+] Nikto finalizado.${NC}"
 
 # 3. Nuclei
